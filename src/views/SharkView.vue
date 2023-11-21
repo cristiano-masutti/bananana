@@ -1,10 +1,15 @@
 <template>
-<h1> Welcome </h1>
+<SharkVue/>
 </template>
 
 <script>
+import SharkVue from "../components/SharkVue.vue";
+
 export default {
 name: "HomeView",
+components: {
+    SharkVue
+}
 }
 
 </script>
