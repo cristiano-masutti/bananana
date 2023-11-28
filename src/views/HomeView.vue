@@ -28,11 +28,12 @@ export default {
 <style scoped>
 
 .container {
-  
+  width: 100%;
+  height: 100%;
+  background-color: #242424; /* Set your desired background color */
 }
+
 .top-container {
-  margin-top: 100px;
-  margin-left: 100px;
   display: flex;
   height: 80vh;
   width: 100%;
