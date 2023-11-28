@@ -1,4 +1,6 @@
-#!/home/giorgio/Desktop/Information_Retrival/bananana/env/bin/python
+#!/bin/sh
+'''exec' "/Users/cristiano/Documents/USI/Semester 5/Information Retrieval/bananana/env/bin/python3" "$0" "$@"
+' '''
 # -*- coding: utf-8 -*-
 import re
 import sys
