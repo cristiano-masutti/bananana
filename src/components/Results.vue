@@ -1,15 +1,18 @@
 <template>
-    <div style="background-color: blue; height: 100%; widht:100%; overflow: auto;">
-        <h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1>
+    <div style="background-color: #242424; height: 75vh; overflow-y: auto;">
+        <AlbumRecord/>
     </div>
 </template>
 
 <script>
 
-
+import AlbumRecord from './AlbumRecord.vue'
 import axios from 'axios'
 export default {
     name: 'SharkVue',
+    components : {
+        AlbumRecord
+    },
     data() {
         return {
             msg: ""
@@ -37,3 +40,7 @@ export default {
 }
 
 </script>
+
+<style>
+    
+</style>
