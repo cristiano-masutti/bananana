@@ -14,7 +14,7 @@ dataframes1 = []
 dataframes2 = []
 dataframes3 = []
 
-with open('./data/results_album1.jsonl', 'r') as file:
+with open('./data/result1.jsonl', 'r') as file:
     for line in file:
         json_obj = json.loads(line)
         df = pd.DataFrame([json_obj])
@@ -23,7 +23,7 @@ with open('./data/results_album1.jsonl', 'r') as file:
 
 df1 = pd.concat(dataframes1, ignore_index=True)
 
-with open('./data/results_album2.jsonl', 'r') as file:
+with open('./data/result2.jsonl', 'r') as file:
     for line in file:
         json_obj = json.loads(line)
         df = pd.DataFrame([json_obj])
@@ -33,7 +33,7 @@ with open('./data/results_album2.jsonl', 'r') as file:
 df2 = pd.concat(dataframes2, ignore_index=True)
 
 
-with open('./data/results_album3.jsonl', 'r') as file:
+with open('./data/result3.jsonl', 'r') as file:
     for line in file:
         json_obj = json.loads(line)
         df = pd.DataFrame([json_obj])
@@ -44,13 +44,11 @@ df3 = pd.concat(dataframes3, ignore_index=True)
 
 df = pd.concat([df1, df2, df3], ignore_index=True)
 
-
-
 album_name = df.album.values
 artist_name = df.artist.values
-
+link = df.link.values
+img = df.img.values
 description = df.description.values
-print(df)
 
 df['genres_concatenated'] = df['genre'].apply(lambda x: ', '.join(x))
 generes_type = df.genres_concatenated.values
@@ -72,32 +70,34 @@ index = pt.IndexFactory.of(index_ref)
 #lets see what type index is.
 type(index)
 
-print(index.getCollectionStatistics().toString())
+# print(index.getCollectionStatistics().toString())
 
-for kv in index.getLexicon():
-    print("%s  -> %s " % (kv.getKey(), " ".join(kv.getValue().toString().split())))
+# for kv in index.getLexicon():
+#     print("%s  -> %s " % (kv.getKey(), " ".join(kv.getValue().toString().split())))
+
+
 
 """INVERTED INDEX"""
 
-word_ = "javelin"
-pointer = index.getLexicon()[word_]
-for posting in index.getInvertedIndex().getPostings(pointer):
-    print(posting.toString() + " doclen=%d" % posting.getDocumentLength())
+# word_ = "javelin"
+# pointer = index.getLexicon()[word_]
+# for posting in index.getInvertedIndex().getPostings(pointer):
+#     print(posting.toString() + " doclen=%d" % posting.getDocumentLength())
 
-br = pt.BatchRetrieve(index, wmodel="BM25")
+# br = pt.BatchRetrieve(index, wmodel="BM25")
 # br.search("javelin")
 
 # br.search("Tender")
 
 # br.search("Golden Apples of the Sun")
 
-bm25 = pt.BatchRetrieve(index, wmodel="BM25")
+# bm25 = pt.BatchRetrieve(index, wmodel="BM25")
 
 # bm25.search("Blonde Redhead")
 
 def get_album(docid):
   id = int(docid[1:])
-  return album_name[id].replace('Album', '')
+  return album_name[id]
 
 def retriever_album(df):
   album = []
@@ -109,15 +109,30 @@ def retriever_album(df):
 
 def get_artist(docid):
     id = int(docid[1:])
-    return artist_name[id].replace('Artist', '')
+    return artist_name[id]
 
 def get_genres(docid):
     id = int(docid[1:])
-    return generes_type[id].replace('Genre', '')
-  
+    return generes_type[id]
+
+def retriever_genre(df):
+      genre = []
+      for i in range(df.shape[0]):
+        docid = df.loc[i, 'docno']
+        genre.append(get_album(docid))
+      df['Genre'] = genre
+      return df
+
 def get_description(docid):
     id = int(docid[1:])
-    return description[id].replace('Description', '')
+    return description[id]
+
+def get_link(docid):
+    id = int(docid[1:])
+    return link[id]
+def get_link_img(docid):
+    id = int(docid[1:])
+    return img[id]
 
 
 def retriever_artist(df):
@@ -140,24 +155,26 @@ def retrieve_query(query):
     genres = []
     description = []
     link = []
-    link_image = []
+    image = []
+
     for i in range(results.shape[0]):
         docid = results.loc[i, 'docno']
         artist.append(get_artist(docid))
         album.append(get_album(docid))
         genres.append(get_genres(docid))
         description.append(get_description(docid))
+        link.append(get_link(docid))
+        image.append(get_link_img(docid))
     results['Artist'] = artist
     results['Album'] = album
     results['Genres'] = genres
     results['Description'] = description
+    results['Link'] = link
+    results['Img'] = image
     df_result = pd.DataFrame()
-    df_result = results[['Artist', 'Album', 'Genres', 'Description']]
-    print(df_result)
+    df_result = results[['Artist', 'Album', 'Genres', 'Description', 'Link', 'Img']]
     return df_result
 
-    
-retrive = retrieve_query("blonde redhead")
 
 """For album"""
 
