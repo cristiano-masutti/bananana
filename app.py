@@ -1,7 +1,8 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_cors import CORS
+from indexer import retrieve_query
 
 app = Flask(__name__)
 CORS(app)
@@ -38,9 +39,12 @@ def index():
         return render_template('index.html', tasks=tasks)
 
 
-@app.route('/shark', methods=['GET'])
-def shark():
-    return ("CRISTIANO FUNZIONA")
+@app.route('/<query>', methods=['GET'])
+def shark(query):
+    print("The query is : " +query)
+    result_df = retrieve_query(query)
+    result_json = result_df.to_dict(orient='records')
+    return jsonify(result_json)
 
 
 @app.route('/delete/<int:id>')

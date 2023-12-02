@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div>
-      <input v-model="chatInput" @focus="onFocus" @focusout="onFocusOut" type="text" class="input" placeholder="Type your message...">
+      <input v-model="chatInput" @keyup.enter="sendRequest" @focus="onFocus" @focusout="onFocusOut" type="text" class="input" placeholder="Type your message...">
     </div>
     <div class="close-btn" @click="clearInput" :class="{ active: isCloseBtnActive }">&times;</div>
   </div>
@@ -21,19 +21,21 @@ export default {
   },
   mounted() {
     console.log('Component mounted.');
-    this.getResponse();
   },
   methods: {
-    async getResponse() {
-      console.log('Getting response from server.');
-      const path = 'http://127.0.0.1:5000/shark';
-      try {
-        const response = await axios.get(path);
-        console.log(response.data);
-        this.msg = response.data;
-      } catch (error) {
-        console.log("Error:", error);
-      }
+    sendRequest() {
+      console.log('Sending request to server.');
+      const path = `http://127.0.0.1:5000/${this.chatInput}`;
+      axios.get(path)
+        .then(response => {
+          // Handle the response from the server
+          console.log(response.data);
+          // You can update your Vue component state or perform other actions here
+        })
+        .catch(error => {
+          // Handle any errors that occurred during the request
+          console.error('Error:', error);
+        });
     },
     onFocus() {
       this.isCloseBtnActive = true;
