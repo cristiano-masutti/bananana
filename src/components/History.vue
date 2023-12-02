@@ -1,6 +1,7 @@
 <template>
     <div style="background-color: #D9D9D9; margin-top: 10px; margin-right: 50px; margin-bottom: 30px; height: 75vh; overflow-y: auto;">
-        <h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1><h1>Pippo</h1>
+        <h1 style="margin-left: 10px">History</h1>
+        
     </div>
 </template>
 

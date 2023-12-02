@@ -1,84 +1,99 @@
 <template>
-    <div style="padding-top:20px;">
-        <form class="search-container">
-            <input type="text" id="search-bar" placeholder="What can I help you with today?">
-            <a href="#"><img class="search-icon" src="http://www.endlessicons.com/wp-content/uploads/2012/12/search-icon.png"></a>
-        </form>
+  <div class="container">
+    <div>
+      <input v-model="chatInput" @focus="onFocus" @focusout="onFocusOut" type="text" class="input" placeholder="Type your message...">
     </div>
+    <div class="close-btn" @click="clearInput" :class="{ active: isCloseBtnActive }">&times;</div>
+  </div>
 </template>
 
 <script>
+import axios from 'axios';
 
-
-import axios from 'axios'
 export default {
-    name: 'SharkVue',
-    data() {
-        return {
-            msg: ""
-        }
+  name: 'SharkVue',
+  data() {
+    return {
+      msg: "",
+      chatInput: "",
+      isCloseBtnActive: false
+    };
+  },
+  mounted() {
+    console.log('Component mounted.');
+    this.getResponse();
+  },
+  methods: {
+    async getResponse() {
+      console.log('Getting response from server.');
+      const path = 'http://127.0.0.1:5000/shark';
+      try {
+        const response = await axios.get(path);
+        console.log(response.data);
+        this.msg = response.data;
+      } catch (error) {
+        console.log("Error:", error);
+      }
     },
-    async mounted() {
-        console.log('Component mounted.')
-        this.getResponse();
+    onFocus() {
+      this.isCloseBtnActive = true;
     },
-    methods: {
-        async getResponse() {
-            console.log('Getting response from server.')
-            const path = 'http://127.0.0.1:5000/shark';
-            await axios.get(path)
-                .then((response) => {
-                    console.log(response.data);
-                    this.msg = response.data;
-                })
-                .catch(error => {
-                    console.log("err", error);
-                })
-        },
+    onFocusOut() {
+      this.isCloseBtnActive = false;
+      this.chatInput = "";
+    },
+    clearInput() {
+      this.chatInput = "";
     }
-
-}
-
+  }
+};
 </script>
 
 <style>
-.search-container{
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    margin: 0 auto;
+.container {
+  position: relative;
+  padding: 20px 50px;
 }
-  
-input#search-bar{
-    margin: 0 auto;
-    width: 90%;
-    height: 45px;
-    padding: 0 20px;
-    font-size: 1rem;
-    border: 1px solid #D0CFCE;
-    outline: none;
-    &:focus{
-      border: 1px solid #242424;
-      transition: 0.35s ease;
-      color: #242424;
-      &::-webkit-input-placeholder{
-        transition: opacity 0.45s ease; 
-        opacity: 0;
-      }
-      &::-moz-placeholder {
-        transition: opacity 0.45s ease; 
-        opacity: 0;
-      }
-      &:-ms-placeholder {
-        transition: opacity 0.45s ease; 
-        opacity: 0;
-      }    
-    }
+
+.close-btn {
+  position: absolute;
+  top: 27px;
+  right: 80px;
+  font-size: 35px;
+  cursor: pointer;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.5s ease;
 }
-  
-.search-icon{
-    background-color: #D0CFCE;
-    width: 47px;
-    height: 47px;
+
+.close-btn.active {
+  opacity: 1;
+  animation: animate 0.5s linear;
+}
+
+.input {
+  width: 85%;
+  border: 1px solid #D9D9D9;
+  background: transparent;
+  padding: 15px 30px;
+  border-radius: 50px;
+  outline: none;
+  font-size: 18px;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+::-webkit-input-placeholder {
+  color: #fff;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+::-moz-placeholder {
+  color: #fff;
+}
+
+:-ms-input-placeholder {
+  color: #fff;
 }
 </style>

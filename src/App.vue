@@ -1,7 +1,11 @@
-<!-- ./src/App.vue -->
 <template>
   <div class="parent">
-    <div class="div1"><img src="./assets/Banananana.webp" width="100" height="100"></div>
+    <div class="div1">
+      <div class="inParent">
+        <img src="./assets/Banananana.webp" width="100" height="100">
+        <h1 class="custom-h1">Banananana</h1>
+      </div>
+    </div>
     <div class="div2"> </div>
     <div class="div3"> </div>
     <div class="div4"> </div>
@@ -31,40 +35,56 @@ export default {
 <style>
 .parent {
   display: grid;
-  background-color: #242424;
   grid-template-columns: 0.3fr 2fr 0.5fr;
-  grid-template-rows: 0.3fr 1fr 0.3fr;
+  grid-template-rows: 1fr 1 fr 1 fr; /* Increased the size of the last row to 0.5fr */
   grid-column-gap: 0px;
   grid-row-gap: 0px;
+  background-color: #242424;
   height: 100vh;
-  }
+}
+
+.custom-h1 {
+  font-family: 'Irish Grover', cursive;
+  font-size: 20px;
+  color: #D9D9D9;
+}
+
+.inParent {
+  margin-left: 20px;
+  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
   
-  .div1 { 
-    grid-area: 1 / 1 / 2 / 2; 
-  }
-  .div2 { 
-    grid-area: 1 / 2 / 2 / 3; 
-  }
-  .div3 { 
-    grid-area: 1 / 3 / 2 / 4; 
-  }
-  .div4 { 
-    grid-area: 2 / 1 / 3 / 2; 
-  }
-  .div5 { 
-    overflow: auto;
-    grid-area: 2 / 2 / 3 / 3; 
-  }
-  .div6 { 
-    grid-area: 2 / 3 / 3 / 4; 
-  }
-  .div7 { 
-    grid-area: 3 / 1 / 4 / 2; 
-  }
-  .div8 { 
-    grid-area: 3 / 2 / 4 / 3; 
-  }
-  .div9 { 
-    grid-area: 3 / 3 / 4 / 4; 
-  }
+.div1 { 
+  grid-area: 1 / 1 / 2 / 2; 
+}
+.div2 { 
+  grid-area: 1 / 2 / 2 / 3; 
+}
+.div3 { 
+  grid-area: 1 / 3 / 2 / 4; 
+}
+.div4 { 
+  grid-area: 2 / 1 / 3 / 2; 
+}
+.div5 { 
+  overflow: auto;
+  grid-area: 2 / 2 / 3 / 3; 
+}
+.div6 { 
+  grid-area: 2 / 3 / 3 / 4; 
+}
+.div7 { 
+  grid-area: 3 / 1 / 4 / 2; 
+}
+.div8 { 
+  grid-area: 3 / 2 / 4 / 3;
+  border-top: 1px solid white; /* Add a white line on the upper border */
+}
+.div9 { 
+  grid-area: 3 / 3 / 4 / 4;
+  border-top: 1px solid white; /* Add a white line on the upper border */
+}
 </style>
