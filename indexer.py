@@ -52,7 +52,7 @@ description = df.description.values
 
 df['genres_concatenated'] = df['genre'].apply(lambda x: ', '.join(x))
 generes_type = df.genres_concatenated.values
-df['text'] = df['album'] + ' ' + df['artist'] + ' ' + df['genres_concatenated'] + ' ' + df['description']
+df['text'] = df['album'] + ' ' + df['artist'] + ' ' + df['genres_concatenated']
 df['text'] = df['text'].str.lower().str.replace(r'\s+', ' ', regex=True)
 
 df['docno'] = "d" + df.index.astype(str)
@@ -149,7 +149,7 @@ def retrieve_query(query):
     bm25 = pt.BatchRetrieve(index, num_results=30, wmodel="BM25")
     queries = pd.DataFrame([["q1", query]], columns=["qid", "query"])
     results = bm25.transform(queries)
-
+    
     artist = []
     album = []
     genres = []
@@ -173,8 +173,10 @@ def retrieve_query(query):
     results['Img'] = image
     df_result = pd.DataFrame()
     df_result = results[['Artist', 'Album', 'Genres', 'Description', 'Link', 'Img']]
+    print(df_result[["Artist", "Album"]])
     return df_result
 
+retrieve_query("ac dc")
 
 """For album"""
 
