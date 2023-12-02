@@ -36,7 +36,7 @@ export default {
 .parent {
   display: grid;
   grid-template-columns: 0.3fr 2fr 0.5fr;
-  grid-template-rows: 1fr 1 fr 1 fr; /* Increased the size of the last row to 0.5fr */
+  grid-template-rows: 1fr 1fr 1fr; /* Increased the size of the last row to 0.5fr */
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   background-color: #242424;
