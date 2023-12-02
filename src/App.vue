@@ -9,10 +9,10 @@
     <div class="div2"> </div>
     <div class="div3"> </div>
     <div class="div4"> </div>
-    <div class="div5"> <Results/> </div>
+    <div class="div5"> <Results :results="this.queryResult"/> </div>
     <div class="div6"> <History/> </div>
     <div class="div7"> </div>
-    <div class="div8"> <Search/> </div>
+    <div class="div8"> <Search @search="updateSearch"/> </div>
     <div class="div9"> </div>
   </div>
 </template>
@@ -28,6 +28,12 @@ export default {
     Results,
     Search,
     History
+  },
+  data() {
+    return {
+      queryResult : [],
+      query: "",
+    }
   },
   mounted() {
     // Add scroll event listener
@@ -49,6 +55,10 @@ export default {
     // Remove the scroll event listener when the component is about to be unmounted
     window.removeEventListener("scroll", this.handleScroll);
   },
+  updateSearch(query, queryResult) {
+    this.query = query;
+    this.queryResult = queryResult;
+  }
 };
 </script>
 

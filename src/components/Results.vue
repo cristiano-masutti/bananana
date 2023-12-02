@@ -1,10 +1,7 @@
 <template>
     <div style="background-color: #242424; height: 75vh; overflow-y: auto;">
       <div class="album-container">
-        <AlbumRecord />
-        <AlbumRecord />
-        <AlbumRecord />
-        <AlbumRecord />
+        <AlbumRecord v-for="result in results" :key="result.artist" :result="result" />
       </div>
     </div>
   </template>
@@ -18,6 +15,9 @@
     components: {
       AlbumRecord
     },
+    props: {
+      results: []
+    },
     data() {
       return {
         msg: ""
@@ -28,17 +28,7 @@
       this.getResponse();
     },
     methods: {
-      async getResponse() {
-        console.log('Getting response from server.')
-        const path = 'http://127.0.0.1:5000/shark';
-        try {
-          const response = await axios.get(path);
-          console.log(response.data);
-          this.msg = response.data;
-        } catch (error) {
-          console.log("Error:", error);
-        }
-      },
+      
     }
   }
   </script>
