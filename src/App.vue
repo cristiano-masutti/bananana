@@ -24,13 +24,35 @@ import History from "@/components/History.vue";
 
 export default {
   name: "App",
-   components: {
-     Results,
+  components: {
+    Results,
     Search,
     History
-   }
+  },
+  mounted() {
+    // Add scroll event listener
+    window.addEventListener("scroll", this.handleScroll);
+  },
+  methods: {
+    handleScroll() {
+      // Check if the user has reached the bottom of the page
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        // Disable or modify the default scroll behavior
+        event.preventDefault();
+
+        // You can also perform other actions here if needed
+        // For example, loading more content or triggering a function
+      }
+    },
+  },
+  beforeUnmount() {
+    // Remove the scroll event listener when the component is about to be unmounted
+    window.removeEventListener("scroll", this.handleScroll);
+  },
 };
 </script>
+
+
 
 <style>
 .parent {
@@ -86,5 +108,10 @@ export default {
 .div9 { 
   grid-area: 3 / 3 / 4 / 4;
   border-top: 1px solid white; /* Add a white line on the upper border */
+}
+
+body {
+  margin: 0;
+  overflow-y: hidden;
 }
 </style>
