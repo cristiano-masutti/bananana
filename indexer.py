@@ -1,15 +1,25 @@
-import nltk
-from nltk.corpus import stopwords
-import string
+
 import pyterrier as pt
 import pandas as pd
 import json
 
+import nltk
+from nltk.stem import PorterStemmer
+from nltk.tokenize import word_tokenize
+nltk.download('punkt')
+import string
+
+import sklearn
+from sklearn.manifold import TSNE
+from sklearn.cluster import KMeans, DBSCAN
+from sklearn.manifold import TSNE
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn.preprocessing import StandardScaler
+
+
 if not pt.started():
       pt.init()
 
-nltk.download('punkt')
-nltk.download('wordnet')
 dataframes1 = []
 dataframes2 = []
 dataframes3 = []
@@ -56,6 +66,9 @@ df['text'] = df['album'] + ' ' + df['artist'] + ' ' + df['genres_concatenated']
 df['text'] = df['text'].str.lower().str.replace(r'\s+', ' ', regex=True)
 
 df['docno'] = "d" + df.index.astype(str)
+
+df_complete = df
+
 
 df = df[['docno', 'text']]
 
@@ -176,23 +189,73 @@ def retrieve_query(query):
     print(df_result[["Artist", "Album"]])
     return df_result
 
-retrieve_query("ac dc")
 
-"""For album"""
+# """For album"""
 
-bm25 = pt.BatchRetrieve(index, num_results =10, wmodel="BM25")
-queries = pd.DataFrame([["q1", "tomb mold"], ["q2", "blonde redhead"]], columns=["qid", "query"])
-results = bm25.transform(queries)
-retriever_album(results)
+# bm25 = pt.BatchRetrieve(index, num_results =10, wmodel="BM25")
+# queries = pd.DataFrame([["q1", "tomb mold"], ["q2", "blonde redhead"]], columns=["qid", "query"])
+# results = bm25.transform(queries)
+# retriever_album(results)
 
-"""For artist"""
+# """For artist"""
 
-bm25 = pt.BatchRetrieve(index, num_results =10, wmodel="BM25")
-queries = pd.DataFrame([["q1", "golden apples of the sun"], ["q2", "afternoon x"]], columns=["qid", "query"])
-results = bm25.transform(queries)
-retriever_artist(results)
+# bm25 = pt.BatchRetrieve(index, num_results =10, wmodel="BM25")
+# queries = pd.DataFrame([["q1", "golden apples of the sun"], ["q2", "afternoon x"]], columns=["qid", "query"])
+# results = bm25.transform(queries)
+# retriever_artist(results)
 
 # pt.io.write_results(results, "res_bm25.txt", format='trec')
 
 # Cluster
+
+
+def apply_stem(text, stemmer):
+    # Check if the text is a string or bytes-like object
+    if isinstance(text, (str, bytes)):
+        words = word_tokenize(text)
+        stemmed_text = ' '.join([stemmer.stem(word) for word in words])
+        return stemmed_text
+    else:
+        # Handle the case where the input is not a string or bytes-like object
+        return ''
+
+# Rest of your code remains unchanged
+genres = df_complete['genres_concatenated'].unique()
+list_genres = list(genres)
+number_of_clusters = len(list_genres)
+words = df['text'].values
+
+stemmer = PorterStemmer()
+df_complete['text_stemmed'] = df_complete['text'].apply(lambda x: apply_stem(x, stemmer))
+
+# Vectorization
+vectorizer = TfidfVectorizer(stop_words='english', lowercase=True, max_df=0.9, min_df=0.01, max_features=1000)
+X = vectorizer.fit_transform(df_complete['text_stemmed'])
+
+# KMeans clustering
+number_of_clusters = len(df_complete['genres_concatenated'].unique())
+kMeans = KMeans(n_clusters=number_of_clusters, random_state=0, n_init=10).fit(X)
+df_complete['cluster'] = kMeans.labels_
+
+# Filter out rows with empty genres_concatenated
+non_empty_df = df_complete[df_complete['genres_concatenated'] != '']
+
+# Final cluster labels and genres
+final_df = non_empty_df.groupby(['cluster'])['genres_concatenated'].agg(lambda x: pd.Series.mode(x)[0]).reset_index()
+final_clusters = final_df['cluster'].tolist()
+
+# Identify missing clusters
+founded_clusters = final_df['cluster'].tolist()
+missing_clusters = list(set(range(number_of_clusters)) - set(founded_clusters))
+
+# Create a DataFrame for missing clusters with the default subject 'Music'
+miss_clus_subj = ['Music' for _ in range(len(missing_clusters))]
+missing_df = pd.DataFrame({'cluster': missing_clusters, 'genres_concatenated': miss_clus_subj})
+
+# Concatenate the DataFrames
+final_df = pd.concat([final_df, missing_df], ignore_index=True)
+
+# Print final cluster information
+for i, row in final_df.iterrows():
+    print(f"Cluster {row['cluster']}: {row['genres_concatenated']}")
 
