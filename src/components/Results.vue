@@ -8,7 +8,6 @@
   
   <script>
   import AlbumRecord from './AlbumRecord.vue'
-  import axios from 'axios'
   
   export default {
     name: 'SharkVue',
@@ -25,7 +24,6 @@
     },
     async mounted() {
       console.log('Component mounted.')
-      this.getResponse();
     },
     methods: {
       

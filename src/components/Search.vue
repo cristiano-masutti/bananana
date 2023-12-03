@@ -16,21 +16,50 @@ export default {
     return {
       msg: "",
       chatInput: "",
-      isCloseBtnActive: false
+      isCloseBtnActive: false,
+      previosQuery: "",
     };
   },
-  mounted() {
-    console.log('Component mounted.');
+  props: {
+    oldQuery: String,
+  },
+  watch: {
+    oldQuery: 'sendRequestOnQueryChange',
   },
   methods: {
+    sendRequestOnQueryChange() {
+      // Check if oldQuery has a value and send the request immediately
+      if (this.oldQuery) {
+        this.sendRequestOld();
+      }
+    },
     sendRequest() {
       console.log('Sending request to server.');
       const path = `http://127.0.0.1:5000/${this.chatInput}`;
+      
       axios.get(path)
         .then(response => {
           // Handle the response from the server
           console.log(response.data);
-          // You can update your Vue component state or perform other actions here
+          const data = response.data;
+          this.$emit('search', this.chatInput, data);
+        })
+        .catch(error => {
+          // Handle any errors that occurred during the request
+          console.error('Error:', error);
+        });
+        this.previosQuery = "";
+    },
+    sendRequestOld() {
+      this.previosQuery = this.oldQuery;
+      const path = `http://127.0.0.1:5000/${this.previosQuery}`;
+
+      axios.get(path)
+        .then(response => {
+          // Handle the response from the server
+          console.log(response.data);
+          const data = response.data;
+          this.$emit('search', this.chatInput, data);
         })
         .catch(error => {
           // Handle any errors that occurred during the request
@@ -46,7 +75,7 @@ export default {
     },
     clearInput() {
       this.chatInput = "";
-    }
+    },
   }
 };
 </script>
@@ -54,7 +83,7 @@ export default {
 <style>
 .container {
   position: relative;
-  padding: 20px 50px;
+  padding: 10px 50px;
 }
 
 .close-btn {

@@ -10,9 +10,9 @@
     <div class="div3"> </div>
     <div class="div4"> </div>
     <div class="div5"> <Results :results="this.queryResult"/> </div>
-    <div class="div6"> <History/> </div>
+    <div class="div6"> <History :query="this.query"  @item-clicked="handleItemClick" /> </div>
     <div class="div7"> </div>
-    <div class="div8"> <Search @search="updateSearch"/> </div>
+    <div class="div8"> <Search :oldQuery="this.oldQuery" @search="updateSearch"/> </div>
     <div class="div9"> </div>
   </div>
 </template>
@@ -32,7 +32,8 @@ export default {
   data() {
     return {
       queryResult : [],
-      query: "",
+      query: [],
+      oldQuery: ""
     }
   },
   mounted() {
@@ -50,15 +51,21 @@ export default {
         // For example, loading more content or triggering a function
       }
     },
+    updateSearch(query, queryResult) {
+        console.log("Updating search", query, queryResult);
+        this.query.push(query);
+        this.queryResult = queryResult;
+    },
+    handleItemClick(clickedItem) {
+      console.log('Item clicked in parent:', clickedItem);
+      this.oldQuery = clickedItem
+    },
   },
   beforeUnmount() {
     // Remove the scroll event listener when the component is about to be unmounted
     window.removeEventListener("scroll", this.handleScroll);
   },
-  updateSearch(query, queryResult) {
-    this.query = query;
-    this.queryResult = queryResult;
-  }
+  
 };
 </script>
 
