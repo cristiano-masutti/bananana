@@ -1,16 +1,20 @@
 <template>
   <div class="parent">
     <div class="div1">
-      <div class="inParent">
-        <img src="./assets/Banananana.webp" width="100" height="100">
-        <h1 class="custom-h1">Banananana</h1>
-      </div>
+      <a href="/" class="link-to-home">
+        <div class="inParent">
+          <img src="./assets/Banananana.webp" width="100" height="100" alt="Banananana Image">
+          <h1 class="custom-h1">Banananana</h1>
+        </div>
+      </a>
     </div>
     <div class="div2"> </div>
     <div class="div3"> </div>
     <div class="div4"> </div>
-    <div class="div5"> <Results :results="this.queryResult"/> </div>
-    <div class="div6"> <History :query="this.query"  @item-clicked="handleItemClick" /> </div>
+    <div v-if="this.queryResult == 0"> <Welcome /> </div>
+    <div v-if="this.queryResult == 0" class="div6-empty"></div>
+    <div v-if="this.queryResult != 0" class="div5"> <Results :results="this.queryResult"/> </div>
+    <div v-if="this.queryResult != 0" class="div6"> <History :query="this.query"  @item-clicked="handleItemClick" @clear-history="clearArrayHistory" /> </div>
     <div class="div7"> </div>
     <div class="div8"> <Search :oldQuery="this.oldQuery" @search="updateSearch"/> </div>
     <div class="div9"> </div>
@@ -21,13 +25,15 @@
 import Results from "@/components/Results.vue";
 import Search from "@/components/Search.vue";
 import History from "@/components/History.vue";
+import Welcome from "@/components/Welcome.vue";
 
 export default {
   name: "App",
   components: {
     Results,
     Search,
-    History
+    History,
+    Welcome,
   },
   data() {
     return {
@@ -60,6 +66,9 @@ export default {
       console.log('Item clicked in parent:', clickedItem);
       this.oldQuery = clickedItem
     },
+    clearArrayHistory() {
+      this.query = [];
+    }
   },
   beforeUnmount() {
     // Remove the scroll event listener when the component is about to be unmounted
@@ -125,6 +134,9 @@ export default {
 .div9 { 
   grid-area: 3 / 3 / 4 / 4;
   border-top: 1px solid white; /* Add a white line on the upper border */
+}
+.div6-empty{
+  height: 76vh;
 }
 
 body {
