@@ -1,7 +1,7 @@
 <template>
   <div class="parent">
     <div class="div1">
-      <a href="/" class="link-to-home">
+      <a href="/" class="link-to-home" style="text-decoration: none;">
         <div class="inParent">
           <img src="./assets/Banananana.webp" width="100" height="100" alt="Banananana Image">
           <h1 class="custom-h1">Banananana</h1>
@@ -11,10 +11,10 @@
     <div class="div2"> </div>
     <div class="div3"> </div>
     <div class="div4"> </div>
-    <div v-if="this.queryResult == 0"> <Welcome /> </div>
-    <div v-if="this.queryResult == 0" class="div6-empty"></div>
-    <div v-if="this.queryResult != 0" class="div5"> <Results :results="this.queryResult"/> </div>
-    <div v-if="this.queryResult != 0" class="div6"> <History :query="this.query"  @item-clicked="handleItemClick" @clear-history="clearArrayHistory" /> </div>
+    <div v-if="this.queryResult == 0 && !this.search"> <Welcome /> </div>
+    <div v-if="this.queryResult == 0 && this.search" class="div6-empty"><NoResults/></div>
+    <div v-if="this.queryResult != 0" class="div5"> <Results :results="this.queryResult"/></div>
+    <div class="div6"> <History :query="this.query"  @item-clicked="handleItemClick" @clear-history="clearArrayHistory" /> </div>
     <div class="div7"> </div>
     <div class="div8"> <Search :oldQuery="this.oldQuery" @search="updateSearch"/> </div>
     <div class="div9"> </div>
@@ -26,6 +26,7 @@ import Results from "@/components/Results.vue";
 import Search from "@/components/Search.vue";
 import History from "@/components/History.vue";
 import Welcome from "@/components/Welcome.vue";
+import NoResults from "@/components/NoResults.vue";
 
 export default {
   name: "App",
@@ -34,16 +35,18 @@ export default {
     Search,
     History,
     Welcome,
+    NoResults
   },
   data() {
     return {
       queryResult : [],
       query: [],
-      oldQuery: ""
+      oldQuery: "",
+      search: false
     }
   },
   mounted() {
-    // Add scroll event listener
+    this.search = false;
     window.addEventListener("scroll", this.handleScroll);
   },
   methods: {
@@ -58,9 +61,9 @@ export default {
       }
     },
     updateSearch(query, queryResult) {
-        console.log("Updating search", query, queryResult);
-        this.query.push(query);
-        this.queryResult = queryResult;
+      this.search = true;
+      this.query.unshift(query);
+      this.queryResult = queryResult;
     },
     handleItemClick(clickedItem) {
       console.log('Item clicked in parent:', clickedItem);

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div>
+    <div style="width: 100%;">
       <input v-model="chatInput" @keyup.enter="sendRequest" @focus="onFocus" @focusout="onFocusOut" type="text" class="input" placeholder="Type your message...">
     </div>
     <div class="close-btn" @click="clearInput" :class="{ active: isCloseBtnActive }">&times;</div>
@@ -23,12 +23,12 @@ export default {
   props: {
     oldQuery: String,
   },
-  watch: {
+  watch: { 
     oldQuery: 'sendRequestOnQueryChange',
   },
   methods: {
     sendRequestOnQueryChange() {
-      // Check if oldQuery has a value and send the request immediately
+      this.chatInput = this.oldQuery;
       if (this.oldQuery) {
         this.sendRequestOld();
       }
@@ -82,29 +82,17 @@ export default {
 
 <style>
 .container {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
   position: relative;
   padding: 10px 50px;
 }
 
-.close-btn {
-  position: absolute;
-  top: 27px;
-  right: 80px;
-  font-size: 35px;
-  cursor: pointer;
-  color: #fff;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
-.close-btn.active {
-  opacity: 1;
-  animation: animate 0.5s linear;
-}
-
 .input {
-  width: 85%;
-  border: 1px solid #D9D9D9;
+  width: 100%;
+  border: .5px solid #D9D9D9;
   background: transparent;
   padding: 15px 30px;
   border-radius: 50px;
@@ -112,6 +100,20 @@ export default {
   font-size: 18px;
   color: #fff;
   letter-spacing: 1px;
+}
+
+.close-btn {
+  font-size: 35px;
+  cursor: pointer;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  margin-left: 10px; /* Add some spacing between input and button */
+}
+
+.close-btn.active {
+  opacity: 1;
+  animation: animate 0.5s linear;
 }
 
 ::-webkit-input-placeholder {

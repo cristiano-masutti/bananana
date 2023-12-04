@@ -1,5 +1,5 @@
 <template>
-  <a :href="result.Link" class="album-record linkref">
+  <a :href="result.Link" target="_blank" class="album-record linkref">
     <div class="top">
       <div class="image-container">
         <img v-if="result.Img" :src="result.Img" alt="Album Cover" class="album-cover" />
