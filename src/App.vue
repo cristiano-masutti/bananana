@@ -145,5 +145,6 @@ export default {
 body {
   margin: 0;
   overflow-y: hidden;
+  overflow-x: hidden;
 }
 </style>
