@@ -1,10 +1,10 @@
 <template>
-  <div style="background-color: #242424; height: 75vh; overflow-y: auto;">
-    <div>
-      <p>{{this.sizeResults()}}</p>
+  <div style="background-color: #242424; height: 75vh; overflow-y: auto; margin-right: 20px">
+    <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
+      <h1 style="color: #fcf8f8;">{{this.sizeResults()}}</h1>
       <div>
-        <button v-if="!flagClustering" @click="showClustering">Show Cluster</button>
-        <button v-else @click="hideClustering">Hide Cluster</button>
+        <button class="myButton" v-if="!flagClustering" @click="showClustering">Show Cluster</button>
+        <button class="myButton" v-else @click="hideClustering">Hide Cluster</button>
       </div>
     </div>
     <div v-if="!flagClustering" class="album-container">
@@ -14,18 +14,18 @@
         <div v-if="!showAlbums">
         <!-- Display a list of genres -->
         <ul>
-          <li v-for="([genre, albums]) in Array.from(sortedGenresMap)" :key="genre" @click="showAlbumsForGenre(genre)">
+          <li class="myButton" style="margin: 10px;" v-for="([genre, albums]) in Array.from(sortedGenresMap)" :key="genre" @click="showAlbumsForGenre(genre)">
             {{ genre }} ({{ albums.length }} albums)
           </li>
         </ul>
+        <button class="myButton" style="margin-top: 40px;" @click="loadMore">Load More</button>
       </div>
       <div v-else>
         <AlbumRecord v-for="(result, index) in selectedGenreAlbums" :key="result.artist" :result="result" :isLastItemOnLeft="isLastItemOnLeft(index)" />
 
-        <button @click="showGenres">Back to Genres</button>
+        <button class="myButton" @click="showGenres">Back to Genres</button>
       </div>
     </div>
-    <button @click="loadMore">Load More</button>
   </div>
 </template>
 
@@ -128,7 +128,7 @@ export default {
         return "Returned "+ this.n +" results over " + length + " total.";
       }
       else {
-        return "Returned "+ length + "results";
+        return "Returned "+ length + " results";
       }
     },
     showAlbumsForGenre(genre) {
@@ -144,6 +144,32 @@ export default {
 </script>
 
 <style scoped>
+
+.myButton {
+  background-color: #242424;
+  border: none;
+  color: #f5f5f5;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  border-radius: 4px;
+  width: 300px;
+  margin-right: 40px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margin */
+}
+
+.myButton:hover {
+  background-color: #ffe135;
+  color: #000;
+}
 .album-container {
   display: flex;
   flex-wrap: wrap;
@@ -162,5 +188,37 @@ export default {
 
 .album-container AlbumRecord:last-child.left {
   margin-right: auto; /* Move the last item to the left by using auto margin */
+}
+
+
+.history-item {
+  margin : 5px;
+  padding: 8px;
+  cursor: pointer;
+  background-color: #242424;
+  color: #f5f5f5;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  
+}
+
+.history-item:hover {
+  background-color: #ffe135;
+  color: #000;
+}
+.cluster-item {
+  margin : 5px;
+  padding: 8px;
+  cursor: pointer;
+  background-color: #242424;
+  color: #f5f5f5;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  width: 300px;
+}
+
+.cluster-item:hover {
+  background-color: #ffe135;
+  color: #000;
 }
 </style>
