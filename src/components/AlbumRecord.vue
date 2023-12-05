@@ -7,6 +7,7 @@
       <div class="info-container">
         <h4 class="artist">{{ result.Artist }}</h4>
         <h4 class="album">{{ result.Album }}</h4>
+        <h4 class="genre">{{ result.Genres }}</h4>
       </div>
     </div>
     <div class="description">
@@ -83,7 +84,7 @@ export default {
   padding: 10px; /* Add padding for better spacing */
 }
 
-.artist, .album {
+.artist, .album .genre{
   margin: 0; /* Remove default margin for the headers */
   font-size: 16px; /* Adjust font size */
 }
