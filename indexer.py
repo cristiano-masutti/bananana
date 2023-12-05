@@ -54,14 +54,10 @@ df3 = pd.concat(dataframes3, ignore_index=True)
 
 df = pd.concat([df1, df2, df3], ignore_index=True)
 
-album_name = df.album.values
-artist_name = df.artist.values
-link = df.link.values
-img = df.img.values
-description = df.description.values
+
 
 df['genres_concatenated'] = df['genre'].apply(lambda x: ', '.join(x))
-generes_type = df.genres_concatenated.values
+
 df['text'] = df['album'] + ' ' + df['artist'] + ' ' + df['genres_concatenated']
 df['text'] = df['text'].str.lower().str.replace(r'\s+', ' ', regex=True)
 
@@ -143,6 +139,8 @@ def get_description(docid):
 def get_link(docid):
     id = int(docid[1:])
     return link[id]
+
+
 def get_link_img(docid):
     id = int(docid[1:])
     return img[id]
@@ -159,7 +157,7 @@ def retriever_artist(df):
 
 def retrieve_query(query):
     # Assuming index, pt, get_artist, get_album, get_genres, and get_description are defined/imported
-    bm25 = pt.BatchRetrieve(index, num_results=30, wmodel="BM25")
+    bm25 = pt.BatchRetrieve(index, wmodel="BM25")
     queries = pd.DataFrame([["q1", query]], columns=["qid", "query"])
     results = bm25.transform(queries)
     
@@ -190,23 +188,6 @@ def retrieve_query(query):
     return df_result
 
 
-# """For album"""
-
-# bm25 = pt.BatchRetrieve(index, num_results =10, wmodel="BM25")
-# queries = pd.DataFrame([["q1", "tomb mold"], ["q2", "blonde redhead"]], columns=["qid", "query"])
-# results = bm25.transform(queries)
-# retriever_album(results)
-
-# """For artist"""
-
-# bm25 = pt.BatchRetrieve(index, num_results =10, wmodel="BM25")
-# queries = pd.DataFrame([["q1", "golden apples of the sun"], ["q2", "afternoon x"]], columns=["qid", "query"])
-# results = bm25.transform(queries)
-# retriever_artist(results)
-
-# pt.io.write_results(results, "res_bm25.txt", format='trec')
-
-# Cluster
 
 
 def apply_stem(text, stemmer):
@@ -216,7 +197,6 @@ def apply_stem(text, stemmer):
         stemmed_text = ' '.join([stemmer.stem(word) for word in words])
         return stemmed_text
     else:
-        # Handle the case where the input is not a string or bytes-like object
         return ''
 
 # Rest of your code remains unchanged
@@ -255,7 +235,19 @@ missing_df = pd.DataFrame({'cluster': missing_clusters, 'genres_concatenated': m
 # Concatenate the DataFrames
 final_df = pd.concat([final_df, missing_df], ignore_index=True)
 
+df_complete["genre_clustered"] = df_complete["cluster"].apply(lambda x: final_df[final_df["cluster"] == x]["genres_concatenated"].values[0])
+
+df_finale = df_complete[["album", "artist", "genre", "description", "link", "img", "genre_clustered"]]
+
+album_name = df_complete.album.values
+artist_name = df_complete.artist.values
+link = df_complete.link.values
+img = df_complete.img.values
+description = df_complete.description.values
+generes_type = df_complete.genre_clustered.values
+
+
 # Print final cluster information
-for i, row in final_df.iterrows():
-    print(f"Cluster {row['cluster']}: {row['genres_concatenated']}")
+# for i, row in final_df.iterrows():
+#     print(f"Cluster {row['cluster']}: {row['genres_concatenated']}")
 

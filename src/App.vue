@@ -14,7 +14,7 @@
     <div v-if="this.queryResult == 0 && !this.search"> <Welcome /> </div>
     <div v-if="this.queryResult == 0 && this.search" class="div6-empty"><NoResults/></div>
     <div v-if="this.queryResult != 0" class="div5"> <Results :results="this.queryResult"/></div>
-    <div class="div6"> <History :query="this.query"  @item-clicked="handleItemClick" @clear-history="clearArrayHistory" /> </div>
+    <div class="div6"> <History :query="this.query" @item-clicked="handleItemClick" @clear-history="clearArrayHistory" /> </div>
     <div class="div7"> </div>
     <div class="div8"> <Search :oldQuery="this.oldQuery" @search="updateSearch"/> </div>
     <div class="div9"> </div>
