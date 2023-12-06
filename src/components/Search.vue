@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div style="width: 100%;">
-      <input v-model="chatInput" @keyup.enter="sendRequest" @focus="onFocus" @focusout="onFocusOut" type="text" class="input" placeholder="Type your message...">
+      <input v-model="chatInput" @keyup.enter="sendRequest" @focus="onFocus" @focusout="onFocusOut" type="text" class="input" placeholder="Type your query...">
     </div>
     <div class="close-btn" @click="clearInput" :class="{ active: isCloseBtnActive }">&times;</div>
   </div>

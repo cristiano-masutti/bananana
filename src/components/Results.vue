@@ -3,8 +3,8 @@
     <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
       <h1 style="color: #fcf8f8;">{{this.sizeResults()}}</h1>
       <div>
-        <button class="myButton" v-if="!flagClustering" @click="showClustering">Show Cluster</button>
-        <button class="myButton" v-else @click="hideClustering">Hide Cluster</button>
+        <button class="myButton" v-if="!flagClustering" @click="showClustering">Show Genres</button>
+        <button class="myButton" v-else @click="hideClustering">Hide Genres</button>
       </div>
     </div>
     <div v-if="!flagClustering" class="album-container">
@@ -18,7 +18,6 @@
             {{ genre }} ({{ albums.length }} albums)
           </li>
         </ul>
-        <button class="myButton" style="margin-top: 40px;" @click="loadMore">Load More</button>
       </div>
       <div v-else>
         <AlbumRecord v-for="(result, index) in selectedGenreAlbums" :key="result.artist" :result="result" :isLastItemOnLeft="isLastItemOnLeft(index)" />
@@ -26,6 +25,7 @@
         <button class="myButton" @click="showGenres">Back to Genres</button>
       </div>
     </div>
+    <button v-if="!flagClustering" class="myButton" style="margin-top: 40px;" @click="loadMore">Load More</button>
   </div>
 </template>
 
