@@ -240,7 +240,7 @@ df_complete.loc[empty, "genres_concatenated"] = df_complete.loc[empty, "cluster"
 
 print(df_complete[df_complete["genres_concatenated"] == ""])
 
-df_finale = df_complete[["album", "artist", "genre", "description", "link", "img", "genres_concatenated"]]
+df_finale = df_complete[["album", "artist", "description", "link", "img", "genres_concatenated"]]
 
 album_name = df_complete.album.values
 artist_name = df_complete.artist.values

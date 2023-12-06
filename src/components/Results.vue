@@ -77,16 +77,17 @@ export default {
   methods: {
     clusterMap(){
       const genresMap = new Map();
-
+      let array= []
       // Iterate through each result
       this.results.forEach(result => {
         // Check if the result has a "Genres" property
+        
         if (result.Genres) {
-          // Split genres string into an array
-          const genresArray = result.Genres.split(',');
+          array.push(result.Genres)
+        
 
           // Iterate through genres
-          genresArray.forEach(genre => {
+          array.forEach(genre => {
             // Trim spaces and convert to lowercase for consistency
             const trimmedGenre = genre.trim().toLowerCase();
 

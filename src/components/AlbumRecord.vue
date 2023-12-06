@@ -5,9 +5,9 @@
         <img v-if="result.Img" :src="result.Img" alt="Album Cover" class="album-cover" />
       </div>
       <div class="info-container">
-        <h4 class="artist">{{ result.Artist }}</h4>
-        <h4 class="album">{{ result.Album }}</h4>
-        <h4 class="genre">{{ result.Genres }}</h4>
+        <h4 class="artist">Artist: {{ result.Artist }}</h4>
+        <h4 class="album">Album: {{ result.Album }}</h4>
+        <h4 class="genre">Genre: {{ result.Genres }}</h4>
       </div>
     </div>
     <div class="description">
