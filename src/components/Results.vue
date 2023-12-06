@@ -81,26 +81,16 @@ export default {
       // Iterate through each result
       this.results.forEach(result => {
         // Check if the result has a "Genres" property
-        
-        if (result.Genres) {
-          array.push(result.Genres)
-        
-
-          // Iterate through genres
-          array.forEach(genre => {
-            // Trim spaces and convert to lowercase for consistency
-            const trimmedGenre = genre.trim().toLowerCase();
-
-            // If the genre doesn't exist in the map, create a new array
-            if (!genresMap.has(trimmedGenre)) {
-              genresMap.set(trimmedGenre, []);
-            }
-
-            // Add the result to the genre array in the map
-            genresMap.get(trimmedGenre).push(result);
-          });
-        }
-      });
+          const trimmedGenre = result.Genres.toLowerCase();
+          console.log(trimmedGenre)
+          // If the genre doesn't exist in the map, create a new array
+          if (!genresMap.has(trimmedGenre)) {
+            genresMap.set(trimmedGenre, []);
+          }
+          // Add the result to the genre array in the map
+          genresMap.get(trimmedGenre).push(result);
+        });
+      console.log(genresMap)
       const genresArray = Array.from(genresMap);
 
       // Sort the array based on the length of the genre arrays in descending order
