@@ -222,7 +222,6 @@ non_empty_df = df_complete[df_complete['genres_concatenated'] != '']
 
 # Final cluster labels and genres
 final_df = non_empty_df.groupby(['cluster'])['genres_concatenated'].agg(lambda x: pd.Series.mode(x)[0]).reset_index()
-final_clusters = final_df['cluster'].tolist()
 
 # Identify missing clusters
 founded_clusters = final_df['cluster'].tolist()
@@ -235,16 +234,20 @@ missing_df = pd.DataFrame({'cluster': missing_clusters, 'genres_concatenated': m
 # Concatenate the DataFrames
 final_df = pd.concat([final_df, missing_df], ignore_index=True)
 
-df_complete["genre_clustered"] = df_complete["cluster"].apply(lambda x: final_df[final_df["cluster"] == x]["genres_concatenated"].values[0])
+empty = df_complete["genres_concatenated"] == ""
 
-df_finale = df_complete[["album", "artist", "genre", "description", "link", "img", "genre_clustered"]]
+df_complete.loc[empty, "genres_concatenated"] = df_complete.loc[empty, "cluster"].apply(lambda x: final_df[final_df["cluster"] == x]["genres_concatenated"].values[0])
+
+print(df_complete[df_complete["genres_concatenated"] == ""])
+
+df_finale = df_complete[["album", "artist", "genre", "description", "link", "img", "genres_concatenated"]]
 
 album_name = df_complete.album.values
 artist_name = df_complete.artist.values
 link = df_complete.link.values
 img = df_complete.img.values
 description = df_complete.description.values
-generes_type = df_complete.genre_clustered.values
+generes_type = df_complete.genres_concatenated.values
 
 
 # Print final cluster information
